@@ -12,37 +12,70 @@ class Reader
     if not @typeSet
       @typeSet = preCompile {}
 
-  processObject: (object, parameter) =>
-    return object._read.apply @, [parameter] if object.hasOwnProperty '_read'
+  # processObject: (object, parameter) =>
+  #   return object._read.apply @, [parameter] if object.hasOwnProperty '_read'
+  #   _.reduce object, ((res, value) =>
+  #     key = Object.keys(value)[0]
+  #     res[key] = @read value[key], parameter, res
+  #     res) , {}
+
+  processObject: (object, options) =>
+    # console.log "here1: #{JSON.stringify options}"
+    return object._read.apply @, [options] if object.hasOwnProperty '_read'
     _.reduce object, ((res, value) =>
       key = Object.keys(value)[0]
-      res[key] = @read value[key], parameter, res
+      res[key] = @read value[key], options, res
       res) , {}
 
-  read: (typeName, parameter, result={}) ->
-    console.log "Reader.read"
-    console.log typeName, parameter
+  read: (typeName, options, result={}) ->
+    # console.log "Reader.read"
+    # console.log typeName, options
+
+    { parameter, encoding } = options if options
+
+    # parameter =
+    #   if parameters?.isArray
+    #     parameters?[0]
+    #   else
+    #     parameters
 
     type = @typeSet.definitions[typeName]
     if not type
       type = @typeSet.definitions[typeName] = typeHelper.getTypeInfo(typeName, @typeSet.types)
 
     parameter = typeHelper.getParameterFromResult type.parameter, result if type.isFunction
+      # if type.isFunction
+      #   typeHelper.getParameterFromResult type.parameter, result
+      # else if parameters?.isArray
+      #   parameters?[0]
+      # else
+      #   parameters
 
-    console.log type, parameter
+    # console.log "type: #{JSON.stringify type}"
+    # console.log "parameter: #{parameter}"
 
     switch (typeof type.value)
       when 'undefined'
         throw new Error "#{type.name} isn't a valid type"
       when 'string'
-        @read type.value, parameter
+        # parameters?.unshift type
+        # console.log parameters
+        # @read.apply this, type, parameters
+        # console.log options, 'hello4'
+        @read type.value, parameter, encoding
       when 'function'
-        type.value.apply @, [parameter]
+        # console.log '2'
+        # console.log options, 'hello3'
+        type.value.apply @, [parameter, encoding]
       when 'object'
         if type.isArray
+          # console.log '4'
           _.map [0...Math.floor(typeHelper.getParameterFromResult type.arraySize, result)], =>
-            @processObject type.value, parameter
+            # console.log options, 'hello1'
+            @processObject type.value, parameter or options
         else
-          @processObject type.value, parameter
+          # console.log '5'
+          # console.log options, 'hello2'
+          @processObject type.value, parameter or options
 
 module.exports = Reader

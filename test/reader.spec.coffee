@@ -104,6 +104,16 @@ describe 'Bison Reader', ->
     reader = new Reader buf
     reader.read('utf-8', 5).should.eql 'HELLO'
 
+  it 'should read a fixchar with latin1 encoding', ->
+    buf =  new Buffer [0x48, 0xC9, 0x4C, 0x4C, 0x4F]
+    reader = new Reader buf
+    reader.read('fixchar', { length: 5, encoding: 'binary' }).should.eql 'HÉLLO'
+
+  it 'should read string latin1 with latin1 encoding', ->
+    buf =  new Buffer [0x48, 0xC9, 0x4C, 0x4C, 0x4F]
+    reader = new Reader buf
+    reader.read('latin1', 5).should.eql 'HÉLLO'
+
   it 'should be able to define a simple type', ->
     buf = new Buffer [ 0x01 ]
     reader = new Reader buf, preCompile {'my-simple-type': 'uint8'}
@@ -203,6 +213,16 @@ describe 'Bison Reader', ->
     types = preCompile
       custom: [
         a: 'utf-8(5)'
+      ]
+
+    reader = new Reader buf, types
+    reader.read('custom').should.eql { a: 'HELLO' }
+
+  it 'should be able to read a fixchar', ->
+    buf = new Buffer [0x48, 0x45, 0x4C, 0x4C, 0x4F]
+    types = preCompile
+      custom: [
+        a: 'fixchar(5)'
       ]
 
     reader = new Reader buf, types
