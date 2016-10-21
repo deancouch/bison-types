@@ -28,8 +28,8 @@ class Reader
       res) , {}
 
   read: (typeName, options, result={}) ->
-    # console.log "Reader.read"
-    # console.log typeName, options
+    console.log "Reader.read"
+    console.log typeName, options
 
     { parameter, encoding } = options if options
 
@@ -38,7 +38,7 @@ class Reader
     #     parameters?[0]
     #   else
     #     parameters
-
+    # console.log @typeSet.definitions
     type = @typeSet.definitions[typeName]
     if not type
       type = @typeSet.definitions[typeName] = typeHelper.getTypeInfo(typeName, @typeSet.types)
@@ -64,18 +64,13 @@ class Reader
         # console.log options, 'hello4'
         @read type.value, parameter, encoding
       when 'function'
-        # console.log '2'
-        # console.log options, 'hello3'
-        type.value.apply @, [parameter, encoding]
+        console.log "parameter: #{parameter}"
+        type.value.apply @, [parameter]
       when 'object'
         if type.isArray
-          # console.log '4'
           _.map [0...Math.floor(typeHelper.getParameterFromResult type.arraySize, result)], =>
-            # console.log options, 'hello1'
             @processObject type.value, parameter or options
         else
-          # console.log '5'
-          # console.log options, 'hello2'
           @processObject type.value, parameter or options
 
 module.exports = Reader

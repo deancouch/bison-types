@@ -1,3 +1,4 @@
+_          = require 'lodash'
 should     = require 'should'
 sinon      = require 'sinon'
 preCompile = require "#{SRC}/preCompile"
@@ -307,3 +308,26 @@ describe 'Bison Reader', ->
       ]
     reader = new Reader buf, types
     reader.read('custom').should.eql {a:1, b: undefined}
+
+  it.only 'should be able to read a function type', ->
+    #buf = new Buffer [ 0x04, 0x02, 0x03, 0x04 ]
+    buf = new Buffer [ 0x02, 0x03, 0x04 ]
+
+    # sumArray = (values) ->
+    #   # console.log values
+    #   console.log "calling sumArray(#{values})"
+    #   # _.sum values
+    #   values
+
+    types = preCompile
+      # mult:
+      #   _read: (val) -> @buffer.getUInt8() * val
+      sumArray: (values) -> values
+      custom: [
+        {a: 'uint8'}
+        {b: 'sumArray(a)'}
+        # {b: 'mult(4)'}
+      ]
+
+    reader = new Reader buf, types
+    reader.read('sumArray(13)').should.eql { a: 1,  b: 2, c: 3, d: 4 }
