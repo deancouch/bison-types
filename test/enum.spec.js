@@ -18,11 +18,11 @@ describe('Bison enum', () => {
     it('should encode the enum as its index', () => {
       const writer = new Writer(emptyBuffer(), types);
       writer.write('level', 'reader');
-      writer.rawBuffer().should.eql(new Buffer([ 0x01, 0x00, 0x00, 0x00 ]));
+      writer.rawBuffer().should.eql(Buffer.from([ 0x01, 0x00, 0x00, 0x00 ]));
     });
 
     it('should decode the index as the enum value', () => {
-      const buf = new Buffer([ 0x02, 0x00, 0x00, 0x00 ]);
+      const buf = Buffer.from([ 0x02, 0x00, 0x00, 0x00 ]);
       const reader = new Reader(buf, types);
       reader.read('level').should.eql('writer');
     });
@@ -30,11 +30,11 @@ describe('Bison enum', () => {
     it('can encode to any given type', () => {
       const writer = new Writer(emptyBuffer(), types, {bigEndian: true});
       writer.write('level16', 'reader');
-      writer.rawBuffer().should.eql(new Buffer([ 0x00, 0x01, 0x00, 0x00 ]));
+      writer.rawBuffer().should.eql(Buffer.from([ 0x00, 0x01, 0x00, 0x00 ]));
     });
 
     it('can decode from any given type', () => {
-      const buf = new Buffer([ 0x00, 0x02, 0x00, 0x00 ]);
+      const buf = Buffer.from([ 0x00, 0x02, 0x00, 0x00 ]);
       const reader = new Reader(buf, types, {bigEndian: true});
       reader.read('level16').should.eql('writer');
     });
@@ -55,11 +55,11 @@ describe('Bison enum', () => {
     it('should encode the enum as the object value', () => {
       const writer = new Writer(emptyBuffer(), types);
       writer.write('level', 'reader');
-      writer.rawBuffer().should.eql(new Buffer([ 0x22, 0xbb, 0x00, 0x00 ]));
+      writer.rawBuffer().should.eql(Buffer.from([ 0x22, 0xbb, 0x00, 0x00 ]));
     });
 
     it('should decode the index as the object key', () => {
-      const buf = new Buffer([ 0x33, 0xcc, 0x00, 0x00 ]);
+      const buf = Buffer.from([ 0x33, 0xcc, 0x00, 0x00 ]);
       const reader = new Reader(buf, types);
       reader.read('level').should.eql('writer');
     });
@@ -68,7 +68,7 @@ describe('Bison enum', () => {
 
 
 const emptyBuffer = function() {
-  const buf = new Buffer(4);
+  const buf = Buffer.alloc(4);
   buf.fill(0);
   return buf;
 };

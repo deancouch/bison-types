@@ -21,12 +21,12 @@ describe('Performance', () => it('prints performance figures', () => {
   read(10000, table);
   write(10000, table);
   console.log('');
-  return console.log(table.toString());
+  console.log(table.toString());
 }));
 
 const write = function(count, table) {
   const json = jsonMessage();
-  const buf = new Buffer(64);
+  const buf = Buffer.alloc(64);
   buf.fill(0);
   const start = new Date();
   for (let i = 0, end1 = count, asc = 0 <= end1; asc ? i < end1 : i > end1; asc ? i++ : i--) {
@@ -66,7 +66,7 @@ const jsonMessage =  function() {
 
       i: {
         j: 123,
-        k: 456789,
+        k: 65535,
         l: 123456789,
         m: '4294967366',
         n: 1,
@@ -75,7 +75,7 @@ const jsonMessage =  function() {
   };
 };
 
-const binaryMessage =  () => new Buffer([
+const binaryMessage =  () => Buffer.from([
   0x7b,
   0x39,
   0x30,

@@ -44,13 +44,13 @@ types = bison.preCompile
 
 # time to read!
 
-buf = new Buffer [0x04, 0x92, 0x04, 0x3b, 0xf4, 0x2c, ...]
+buf = Buffer.alloc [0x04, 0x92, 0x04, 0x3b, 0xf4, 0x2c, ...]
 reader = new bison.Reader buf, types, {bigEndian: false}
 json = reader.read 'timeline'
 
 # or write !
 
-buf = new Buffer(1024)
+buf = Buffer.alloc(1024)
 writer = new bison.Writer buf, types, {bigEndian: false}
 writer.write 'timeline', {
   count: 1
@@ -158,7 +158,7 @@ You can also pass in options, look at [clever-buffer](https://github.com/TabDigi
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer [ 0x01, 0x02, 0x03, 0x04 ]
+    buf = Buffer.alloc [ 0x01, 0x02, 0x03, 0x04 ]
     types = bison.preCompile
       my-type: [
         {a: 'uint8'}
@@ -175,7 +175,7 @@ You can also pass in options, look at [clever-buffer](https://github.com/TabDigi
 ```coffee
     bison = require 'bison-types'
     
-    buf = new Buffer [0x48, 0x45, 0x4C, 0x4C, 0x4F]
+    buf = Buffer.alloc [0x48, 0x45, 0x4C, 0x4C, 0x4F]
     types = bison.preCompile
       my-type: [
         a: 'utf-8(5)'
@@ -189,7 +189,7 @@ You can also pass in options, look at [clever-buffer](https://github.com/TabDigi
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer [0x48, 0xC9, 0x4C, 0x4C, 0x4F]
+    buf = Buffer.alloc [0x48, 0xC9, 0x4C, 0x4C, 0x4F]
     types = bison.preCompile
       my-type: [
         a: 'latin1(5)'
@@ -203,7 +203,7 @@ You can also pass in options, look at [clever-buffer](https://github.com/TabDigi
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer [0x48, 0xC3, 0x89, 0x4C, 0x4C, 0x4F]
+    buf = Buffer.alloc [0x48, 0xC3, 0x89, 0x4C, 0x4C, 0x4F]
     types = bison.preCompile
       my-type: [
         a: 'utf-8(6)'
@@ -218,7 +218,7 @@ The power of bison-types is evident as you define more complex types
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer [ 0x01, 0x03, 0x04 ]
+    buf = Buffer.alloc [ 0x01, 0x03, 0x04 ]
     types = bison.preCompile
       my-type: [
         {a: 'uint8'}
@@ -239,7 +239,7 @@ The power of bison-types is evident as you define more complex types
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer [ 0x04, 0x02 ]
+    buf = Buffer.alloc [ 0x04, 0x02 ]
     types = bison.preCompile
       mult:
         _read: (val) -> @buffer.getUInt8() * val
@@ -256,7 +256,7 @@ You can specify arrays in a similar matter
 
 ```coffee
     bison = require 'bison-types'
-    buf = new Buffer [ 0x03, 0x01, 0x02, 0x03 ]
+    buf = Buffer.alloc [ 0x03, 0x01, 0x02, 0x03 ]
     types = bison.preCompile
       object: [
         c: 'uint8'
@@ -281,7 +281,7 @@ You can also pass in options, look at [clever-buffer](https://github.com/TabDigi
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer 4
+    buf = Buffer.alloc 4
     types = bison.preCompile
       my-type: [
         {a: 'uint8'}
@@ -299,7 +299,7 @@ You can also pass in options, look at [clever-buffer](https://github.com/TabDigi
 ```coffee
     bison = require 'bison-types'
     
-    buf = new Buffer 5
+    buf = Buffer.alloc 5
     types = bison.preCompile
       my-type: [
         a: 'utf-8'
@@ -314,7 +314,7 @@ You can also pass in options, look at [clever-buffer](https://github.com/TabDigi
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer 5
+    buf = Buffer.alloc 5
     types = bison.preCompile
       my-type: [
         a: 'latin1'
@@ -329,7 +329,7 @@ You can also pass in options, look at [clever-buffer](https://github.com/TabDigi
 ```coffee
     bison = require 'bison-types'
     
-    buf = new Buffer 10
+    buf = Buffer.alloc 10
     types = bison.preCompile
       my-type: [
         a: 'utf-8(5)'
@@ -344,7 +344,7 @@ You can also pass in options, look at [clever-buffer](https://github.com/TabDigi
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer 6
+    buf = Buffer.alloc 6
     types = bison.preCompile
       my-type: [
         a: 'utf-8'
@@ -360,7 +360,7 @@ The power of bison-types is evident as you define more complex types
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer 4
+    buf = Buffer.alloc 4
     types = bison.preCompile
       my-type: [
         {a: 'uint8'}
@@ -382,7 +382,7 @@ The power of bison-types is evident as you define more complex types
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer 2
+    buf = Buffer.alloc 2
     types = bison.preCompile
       div:
         _write: (val, divider) -> @buffer.writeUInt8(val/divider)
@@ -400,7 +400,7 @@ You can specify a specific value using the following syntax
 ```coffee
     bison = require 'bison-types'
 
-    buf = new Buffer 2
+    buf = Buffer.alloc 2
     types = bison.preCompile
       my-type: [
         {a: 'uint8=1'}
@@ -416,7 +416,7 @@ You can specify arrays in a similar matter
 
 ```coffee
     bison = require 'bison-types'
-    buf = new Buffer 4 
+    buf = Buffer.alloc 4 
     types = bison.preCompile
       object: [
         c: 'uint8'
@@ -435,7 +435,7 @@ This is a shorthand of the above example
 
 ```coffee
     bison = require 'bison-types'
-    buf = new Buffer 4 
+    buf = Buffer.alloc 4 
     types = bison.preCompile
       object: [
         c: 'uint8'
